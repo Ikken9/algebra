@@ -13,6 +13,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{setspace}
+\usepackage{float}
 
 \graphicspath{ {assets/} }
 
@@ -57,13 +58,13 @@
     \vspace{0.3cm}
     {\scshape\Large Facultad de Ingeniería \par}
     \vspace{0.3cm}
-    {\scshape\Huge Proyecto \\Tarea 4 - Titanik \par}
+    {\scshape\Huge Proyecto \\Tarea 1 - Análisis de Sentimientos \par}
     \vspace{1cm}
-    {\Large Probabilidad y Estadística Aplicada \par}
+    {\Large Álgebra Aplicada \par}
     {\Large Profesor: Maglis Mujica \par}
     \vfill
     {\Large Autores: \par}
-    {\Large Martín Caraballo (5.303.799-7)\\Piero Saucedo (5.342.503-5)\\Juan Martín Riccetto (5.324.939-0)\\Juan Manuel Perez () \par}
+    {\Large Piero Saucedo (5.342.503-5)\\Juan Martín Riccetto (5.324.939-0)\\Juan Manuel Perez () \par}
     \vfill
     {\Large \today \par}
 \end{titlepage}
@@ -94,6 +95,66 @@
     Alternativamente, se puede fijar un sistema de coordenadas del espacio \textit{n} \textit{n-dimensional};
     entonces un vector queda unívocamente determinado mediante \textit{n} números, llamados coordenadas del vector.
 
-\subsection{Matriz}\label{subsec:matrix}
-    
+\section{Objetivos}
+\begin{itemize}
+    \item Recopilar diferentes enunciados subidos en línea con ciertas palabras claves en común.
+    \item Categorizar dichas palabras claves en positivas, neutras y negativas.
+    \item Analizar los enunciados recolectados con el fin de obtener distintos datos sobre los mismos en base a las palabras claves que posean.
+\end{itemize}
+
+\section{Desarrollo}
+    \subsection{Frases Elegidas}
+        Acabo de ver Inception otra vez. Cada vez me deja con más preguntas... ¡Es una locura!\\
+Me encantó Barbie! No esperaba que fuera tan divertida y profunda al mismo tiempo.\\
+La cinematografía de Dune es impresionante, pero siento que la historia se quedó corta. ¿Alguien más piensa lo mismo?\\
+¿Alguien más lloró viendo Coco? Esa película siempre me llega al corazón.\\
+No puedo superar lo épico que fue el final de Avengers: Endgame. Todavía me da escalofríos.\\
+¡Qué decepción fue Morbius! Esperaba mucho más de esta película.
+Las películas de terror ya no son lo que eran... Vi Smile y fue predecible en casi todo.\\
+Acabo de ver El Padrino por primera vez. Ahora entiendo por qué es un clásico, ¡es una obra maestra!\\
+¡Me encantó Spider-Man: No Way Home! La nostalgia me pegó fuerte, ¡qué momentos!\\
+Las películas de Studio Ghibli son arte puro. El Viaje de Chihiro es mi favorita de todas.\\
+Nunca pensé que Oppenheimer sería tan fascinante. La historia te mantiene enganchado desde el principio.\\
+¡Qué sorpresa fue The Menu! No esperaba que la película tuviera tantas capas de significado.\\
+Creo que John Wick es la mejor saga de acción de esta década. Las coreografías de pelea son impresionantes.\\
+¿Soy yo o Tenet fue demasiado complicada de entender? Necesito verla de nuevo para captar todo.\\
+El remake de La Sirenita fue hermoso. Me encantó cómo mantuvieron la esencia del original, pero con un toque moderno.\\
+
+
+\subsection{Palabras Clave}
+\begin{itemize}
+    \item \textbf{Positivas:} encanto, fascinante, épico, hermoso, impresionante, divertida, mejor, moderno
+    \item \textbf{Neutrales:}  preguntas, esperaba, siento, necesito, pienso, piensa, puro, enganchado, profunda, clásico
+    \item \textbf{Negativas:} complicadas, decepción, predecible, corta, locura, lloró, fuerte
+
+\end{itemize}
+
+\subsection{Vectores w y s}
+
+
+\subsection{Calidad Promedio y Promedio de Sentimientos}
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Promedios.png}
+\end{figure}
+
+
+\subsection{Frase más positiva}
+Las frases 5, 13 y 15 son las más positivas, todas con un valor de 1.
+
+\subsection{Frase más negativa}
+Las frases 4 y 7 son las más negativas, ambas con un valor de 1.
+
+\subsection{Calidad Promedio}
+La calidad promedio puede verse también como el porcentaje de palabras claves contenidas en cada enunciado, por ejemplo la frase 2 tiene una calidad promedio de 0.16, que podría ser visto como 16\%, de la misma manera, si una frase contuviera el conjunto entero de palabras clave, su calidad promedio sería de 1.00 o 100\%.
+
+\subsection{Promedio de Sentimiento}
+El promedio de sentimiento, se puede resumir en el porcentaje de una frase en un sentimiento específico con respecto al resto, o en otras palabras, se toma el total de palabras claves dentro de una frase, y divide la cantidad de palabras de un sentimiento específico. En el caso de que una frase contenga únicamente palabras positivas, su promedio de sentimiento positivo será 1.00 o 100\%, o en el caso de que haya una cantidad uniforme de palabras para cada sentimiento, los tres receibirán un valor de 0.33 o 33\%.
+
+\subsection{Impacto de las palabras claves}
+Sin duda son las palabras claves las que moldean los resultados provistos por el algoritmo, con solo cambiar un par de estas, desencadenaría tanto en calidades promedio como promedios de sentimiento completamente distintos para la gran mayoría sino todas las frases selectas.
+
+\subsection{Algoritmo Optimizado}
+En general, podría optimizarse el código reemplazando varios de los loops dentro del mismo, con operaciones vectorizadas de la librería NumPy.
+
 \end{document}
