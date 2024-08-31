@@ -6,10 +6,12 @@ from tabulate import tabulate
 
 allowed_characters = re.compile(r"[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑüÜ'\s-]")
 
+# Quita acentos
 def remove_accents(input_str):
     nfkd_form = unicodedata.normalize('NFKD', input_str.lower())
     return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
+# Sanitiza las frases
 def process_phrases(doc):
     phrases = []
     processed_phrases = []
@@ -26,6 +28,7 @@ def process_phrases(doc):
     return phrases, processed_phrases
 
 
+# Esta funcion obtiene el vector W para una frase en base a los keywords
 def obtain_w(phrase, keywords):
     w = np.zeros(len(keywords))
     idx = 0
@@ -37,6 +40,7 @@ def obtain_w(phrase, keywords):
     return w
 
 
+# Esta funcion obtiene el vector S
 def obtain_s(phrase, positive_words, neutral_words, negative_words):
     s = np.zeros(3)
     splitted_phrase = phrase.split(" ")
@@ -50,6 +54,7 @@ def obtain_s(phrase, positive_words, neutral_words, negative_words):
     return s
 
 
+# Calcula el promedio de la calidad
 def calculate_avg_quality(w, keywords_qty):
     words_sum = 0
     for n in w:
@@ -57,6 +62,7 @@ def calculate_avg_quality(w, keywords_qty):
     return words_sum / keywords_qty
 
 
+# Calcula el promedio de los sentimientos
 def calculate_feelings_avg(s):
     total_keywords_qty = 0
 
@@ -95,6 +101,7 @@ def main():
     table = [
         ['Phrase', 'Quality', 'Positive', 'Neutral', 'Negative']
     ]
+
 
     idx = 0
     for p in processed_phrases:
