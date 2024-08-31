@@ -101,6 +101,8 @@ def main():
         w = obtain_w(p, keywords)
         s = obtain_s(p, positive_words, neutral_words, negative_words)
 
+        print(f"\nPhrase: {phrases[idx]}\nw = {w}, \ns = {s}")
+
         quality = calculate_avg_quality(w, len(keywords))
 
         (avg_positive_s,
@@ -112,10 +114,6 @@ def main():
         idx += 1
 
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-
-
-
-
 
 if __name__ == '__main__':
     main()
