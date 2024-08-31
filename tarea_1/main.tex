@@ -132,6 +132,38 @@
 
     \end{itemize}
 
+    \subsection{Funcionamiento del código}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{assets/Codigo1}
+    \end{figure}
+    La primera parte del código sanitiza las frases elegidas de forma que sean más fáciles de manejar y analizar.\\
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{assets/Codigo2}
+    \end{figure}
+    Estas funciones toman las frases sanitizadas y las palabras claves para formar los vectores w y s respectivamente, cuando se encuentra una palabra clave se suma 1 al indice correspondiente.\\
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{assets/Codigo3}
+    \end{figure}
+    Aquí se ven las funciones para calcular la calidad promedio y el promedio de sentimientos de cada frase, la primera función toma todas las palabras claves encontradas y las divide entre las palabras clave totales.
+    La segunda función, separa las palabras clave dentro de las frases en positivas, neutrales y negativas, y divide cada grupo entre las palabras totales encontradas en la frase.\\
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{assets/Codigo4}
+    \end{figure}
+    En el main se definen vectores para cada uno de los tipos de palabras clave y se crea otro que contenga la totalidad de las mismas. Además se crea una variable que contenga las frases procesadas, y una tabla en la que se mostrarán sus atributos.\\
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{assets/Codigo5}
+    \end{figure}
+    Por último se corren todas las funciones mencionadas previamente y se imprimen los resultados.\\
+    
     \subsection{Calidad Promedio y Promedio de Sentimientos}
     \begin{figure}[H]
         \centering
