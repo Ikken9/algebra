@@ -133,37 +133,151 @@
     \end{itemize}
 
     \subsection{Funcionamiento del código}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{assets/Codigo1}
-    \end{figure}
+
     La primera parte del código sanitiza las frases elegidas de forma que sean más fáciles de manejar y analizar.\\
+    Estas funciones toman las frases sanitizadas y las palabras claves para formar los vectores w y s respectivamente, cuando se encuentra una palabra clave se suma 1 al indice correspondiente.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{assets/Codigo2}
-    \end{figure}
-    Estas funciones toman las frases sanitizadas y las palabras claves para formar los vectores w y s respectivamente, cuando se encuentra una palabra clave se suma 1 al indice correspondiente.\\
+    \begin{lstlisting}[language=Python]
+        # Quita acentos
+        def remove_accents(input_str):
+            nfkd_form = unicodedata.normalize('NFKD', input_str.lower())
+            return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{assets/Codigo3}
-    \end{figure}
+        # Sanitiza las frases
+        def process_phrases(doc):
+            phrases = []
+            processed_phrases = []
+            with open(doc, 'r', encoding='utf-8') as file:
+                for phrase in file.readlines():
+                    no_accents_phrase = remove_accents(phrase)
+                    sanitized_phrase = re.sub(
+                        allowed_characters,
+                        "",
+                        no_accents_phrase).replace("\n", "")
+
+                    phrases.append(phrase)
+                    processed_phrases.append(sanitized_phrase)
+            return phrases, processed_phrases
+
+    \end{lstlisting}
+
+    \newpage
+
+    En el siguiente fragmento, se observan las funciones cuyo objetivo es calcular los vectores \textbf{s} y \textbf{w}
+
+    \begin{lstlisting}[language=Python]
+        # Esta funcion obtiene el vector W para una frase en base a los keywords
+        def obtain_w(phrase, keywords):
+            w = np.zeros(len(keywords))
+            idx = 0
+            splitted_phrase = phrase.split(" ")
+            for word in keywords:
+                if word in splitted_phrase:
+                    w[idx] = 1
+                    idx += 1
+            return w
+
+
+        # Esta funcion obtiene el vector S
+        def obtain_s(phrase, positive_words, neutral_words, negative_words):
+            s = np.zeros(3)
+            splitted_phrase = phrase.split(" ")
+            for word in splitted_phrase:
+                if word in positive_words:
+                    s[0] += 1
+                elif word in neutral_words:
+                    s[1] += 1
+                elif word in negative_words:
+                    s[2] += 1
+            return s
+
+    \end{lstlisting}
+
+    \newpage
+
     Aquí se ven las funciones para calcular la calidad promedio y el promedio de sentimientos de cada frase, la primera función toma todas las palabras claves encontradas y las divide entre las palabras clave totales.
-    La segunda función, separa las palabras clave dentro de las frases en positivas, neutrales y negativas, y divide cada grupo entre las palabras totales encontradas en la frase.\\
+    La segunda función, separa las palabras clave dentro de las frases en positivas, neutrales y negativas, y divide cada grupo entre las palabras totales encontradas en la frase.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{assets/Codigo4}
-    \end{figure}
-    En el main se definen vectores para cada uno de los tipos de palabras clave y se crea otro que contenga la totalidad de las mismas. Además se crea una variable que contenga las frases procesadas, y una tabla en la que se mostrarán sus atributos.\\
+    \begin{lstlisting}[language=Python]
+        # Calcula el promedio de la calidad
+        def calculate_avg_quality(w, keywords_qty):
+            words_sum = 0
+            for n in w:
+                words_sum += n
+            return words_sum / keywords_qty
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{assets/Codigo5}
-    \end{figure}
-    Por último se corren todas las funciones mencionadas previamente y se imprimen los resultados.\\
-    
+
+        # Calcula el promedio de los sentimientos
+        def calculate_feelings_avg(s):
+            total_keywords_qty = 0
+
+            for keyword_type_qty in s:
+                total_keywords_qty += keyword_type_qty
+
+            avg_positive_s = s[0]/total_keywords_qty
+            avg_neutral_s = s[1]/total_keywords_qty
+            avg_negative_s = s[2]/total_keywords_qty
+
+            return avg_positive_s, avg_neutral_s, avg_negative_s
+    \end{lstlisting}
+
+    \newpage
+
+    Por último, en la función \textbf{main} se definen vectores para cada uno de los tipos de palabras clave y se crea otro que contenga la totalidad de las mismas. Además se crea una variable que contenga las frases procesadas, y una tabla en la que se mostrarán sus atributos. Posteriormente, las funciones previamente definidas son llamadas en orden para obtener e imprimir los resultados.
+
+    \begin{lstlisting}[language=Python]
+        def main():
+            positive_words = np.array([
+                "encanto", "fascinante", "epico", "hermoso", "impresionante",
+                "divertida", "mejor", "moderno"
+            ])
+
+            neutral_words = np.array([
+                "preguntas", "esperaba", "siento", "necesito", "pienso", "piensa",
+                "puro", "enganchado", "profunda", "clasico"
+            ])
+
+            negative_words = np.array([
+                "complicadas", "decepcion", "predecible", "corta", "locura", "lloro",
+                "fuerte"
+            ])
+
+            keywords = np.concatenate((
+                positive_words,  neutral_words, negative_words
+            ))
+
+            phrases, processed_phrases = process_phrases("phrases.txt")
+
+            table = [
+                ['Phrase', 'Quality', 'Positive', 'Neutral', 'Negative']
+            ]
+
+
+            idx = 0
+            for p in processed_phrases:
+                w = obtain_w(p, keywords)
+                s = obtain_s(p, positive_words, neutral_words, negative_words)
+
+                print(f"\nPhrase: {phrases[idx]}\nw = {w}, \ns = {s}")
+
+                quality = calculate_avg_quality(w, len(keywords))
+
+                (avg_positive_s,
+                 avg_neutral_s,
+                 avg_negative_s) = calculate_feelings_avg(s)
+
+                row = [phrases[idx], quality, avg_positive_s, avg_neutral_s, avg_negative_s]
+                table.append(row)
+                idx += 1
+
+            print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+
+        if __name__ == '__main__':
+            main()
+    \end{lstlisting}
+
+    \newpage
+
     \subsection{Calidad Promedio y Promedio de Sentimientos}
     \begin{figure}[H]
         \centering
